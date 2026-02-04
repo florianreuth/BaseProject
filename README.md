@@ -2,8 +2,8 @@
 A Gradle convention plugin for streamlined project setup and publishing.
 
 ## Contact
-If you encounter any issues, please report them on the [issue tracker](https://github.com/FlorianMichael/BaseProject/issues).
-If you just want to talk or need help with BaseProject, feel free to join my [Discord](https://florianmichael.de/discord).
+If you encounter any issues, please report them on the [issue tracker](https://github.com/florianreuth/BaseProject/issues).
+If you just want to talk or need help with BaseProject, feel free to join my [Discord](https://florianreuth.de/discord).
 
 ## Basic Setup
 Most of the functions provided by this plugin will default to global set properties in the `gradle.properties` file. However, you can override them for special handling (e.g., `setupJava(version = 17)` instead of using the `project_jvm_version` property).
@@ -19,7 +19,7 @@ pluginManagement {
     }
 
     plugins {
-        id("de.florianmichael.baseproject.BaseProject") version "<version>"
+        id("de.florianreuth.baseproject.BaseProject") version "<version>"
     }
 }
 ```
@@ -27,10 +27,10 @@ pluginManagement {
 Update the **`build.gradle.kts`** file:
 
 ```kotlin
-import de.florianmichael.baseproject.*
+import de.florianreuth.baseproject.*
 
 plugins {
-    id("de.florianmichael.baseproject.BaseProject")
+    id("de.florianreuth.baseproject.BaseProject")
 }
 
 // Sets up common configurations: project metadata, Java toolchain, and compiler options
@@ -63,7 +63,7 @@ pluginManagement {
     }
 
     plugins {
-        id 'de.florianmichael.baseproject.BaseProject' version '<version>'
+        id 'de.florianreuth.baseproject.BaseProject' version '<version>'
     }
 }
 ```
@@ -72,7 +72,7 @@ Update the **`build.gradle`** file:
 
 ```groovy
 plugins {
-    id 'de.florianmichael.baseproject.BaseProject'
+    id 'de.florianreuth.baseproject.BaseProject'
 }
 
 // Sets up common configurations: project metadata, Java toolchain, and compiler options
@@ -133,7 +133,7 @@ ossrhPassword=<your account password> # This is an access token nowadays
 #### **`gradle.properties` in the project folder:**
 
 ```properties
-publishing_gh_account=FlorianMichael
+publishing_gh_account=florianreuth
 publishing_dev_name=<full name>
 publishing_dev_mail=<contact mail>
 ```

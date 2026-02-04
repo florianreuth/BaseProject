@@ -1,6 +1,6 @@
 /*
- * This file is part of BaseProject - https://github.com/FlorianMichael/BaseProject
- * Copyright (C) 2024-2026 FlorianMichael/EnZaXD <git@florianmichael.de> and contributors
+ * This file is part of BaseProject - https://github.com/florianreuth/BaseProject
+ * Copyright (C) 2024-2026 Florian Reuth <git@florianreuth.de> and contributors
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.baseproject
+package de.florianreuth.baseproject
 
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -34,16 +34,16 @@ import java.util.*
 
 /**
  * Sets up Maven publishing using predefined repositories:
- * - FlorianMichael's Reposilite
+ * - Florian Reuth's Reposilite
  * - OSSRH (Sonatype)
  *
- * Calls [configureFlorianMichaelRepository], [configureOssrhRepository], and [configureGHPublishing].
+ * Calls [configureFlorianReuthRepository], [configureOssrhRepository], and [configureGHPublishing].
  *
  * Required project property:
  * - `publishing_distribution`: GitHub/GitLab URL used for license and SCM metadata
  */
 fun Project.setupPublishing() {
-    configureFlorianMichaelRepository()
+    configureFlorianReuthRepository()
     configureOssrhRepository()
     configureGHPublishing()
 }
@@ -63,17 +63,17 @@ fun Project.setupViaPublishing() {
 }
 
 /**
- * Configures publishing to FlorianMichael's Maven Reposilite repository.
+ * Configures publishing to Florian Reuth's Maven Reposilite repository.
  *
  * Chooses `snapshots` or `releases` sub-repo based on project version suffix.
  *
  * Example:
- * - If version contains `SNAPSHOT`, publishes to `https://maven.florianmichael.de/snapshots`
- * - Otherwise, to `https://maven.florianmichael.de/releases`
+ * - If version contains `SNAPSHOT`, publishes to `https://maven.florianreuth.de/snapshots`
+ * - Otherwise, to `https://maven.florianreuth.de/releases`
  *
  * Requires authentication via basic username/password (credentials block).
  */
-fun Project.configureFlorianMichaelRepository() {
+fun Project.configureFlorianReuthRepository() {
     val reposiliteUsername = findProperty("reposiliteUsername") as String?
     val reposilitePassword = findProperty("reposilitePassword") as String?
     if (reposiliteUsername == null || reposilitePassword == null) {
@@ -85,7 +85,7 @@ fun Project.configureFlorianMichaelRepository() {
         repositories.maven {
             name = "reposilite"
             url = uri(
-                "https://maven.florianmichael.de/" +
+                "https://maven.florianreuth.de/" +
                     if (project.version.toString().contains("SNAPSHOT")) "snapshots" else "releases"
             )
             credentials {

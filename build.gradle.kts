@@ -45,12 +45,12 @@ tasks {
 }
 
 gradlePlugin {
-    website = "https://github.com/FlorianMichael/BaseProject"
-    vcsUrl = "https://github.com/FlorianMichael/BaseProject.git"
+    website = "https://github.com/florianreuth/BaseProject"
+    vcsUrl = "https://github.com/florianreuth/BaseProject.git"
     plugins {
         create("baseProjectPlugin") {
             id = "${project.group}.${project.name}"
-            implementationClass = "de.florianmichael.baseproject.BaseProjectPlugin"
+            implementationClass = "de.florianreuth.baseproject.BaseProjectPlugin"
             displayName = "BaseProject Convention Plugin"
             description = project.description
             tags = listOf("fabric", "convention")
