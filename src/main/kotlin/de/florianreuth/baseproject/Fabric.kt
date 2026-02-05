@@ -112,7 +112,11 @@ fun Project.setupFabric() {
  */
 @Deprecated("This is only required for Minecraft versions 1.21.11 and older. For newer versions, use setupFabric() instead.")
 fun Project.setupFabricRemap(mappings: MappingsConfigurer = mojangMapped()) {
-    plugins.apply("net.fabricmc.fabric-loom-remap")
+    if (plugins.hasPlugin("net.fabricmc.fabric-loom-remap")) { // Workaround to support older loom builds
+        plugins.apply("net.fabricmc.fabric-loom-remap")
+    } else {
+        plugins.apply("fabric-loom")
+    }
 
     dependencies {
         "modImplementation"("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
