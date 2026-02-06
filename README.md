@@ -14,12 +14,11 @@ Add the plugin to your **`settings.gradle.kts`** file:
 ```kotlin
 pluginManagement {
     repositories {
-        mavenCentral()
         gradlePluginPortal()
     }
 
     plugins {
-        id("de.florianreuth.baseproject.BaseProject") version "<version>"
+        id("de.florianreuth.baseproject") version "<version>"
     }
 }
 ```
@@ -30,7 +29,7 @@ Update the **`build.gradle.kts`** file:
 import de.florianreuth.baseproject.*
 
 plugins {
-    id("de.florianreuth.baseproject.BaseProject")
+    id("de.florianreuth.baseproject")
 }
 
 // Sets up common configurations: project metadata, Java toolchain, and compiler options
@@ -58,12 +57,11 @@ Add the plugin to your **`settings.gradle`** file:
 ```groovy
 pluginManagement {
     repositories {
-        mavenCentral()
         gradlePluginPortal()
     }
 
     plugins {
-        id 'de.florianreuth.baseproject.BaseProject' version '<version>'
+        id 'de.florianreuth.baseproject' version '<version>'
     }
 }
 ```
@@ -72,7 +70,7 @@ Update the **`build.gradle`** file:
 
 ```groovy
 plugins {
-    id 'de.florianreuth.baseproject.BaseProject'
+    id 'de.florianreuth.baseproject'
 }
 
 // Sets up common configurations: project metadata, Java toolchain, and compiler options

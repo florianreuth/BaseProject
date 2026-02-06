@@ -1,3 +1,7 @@
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.Base64
+
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
@@ -54,6 +58,29 @@ gradlePlugin {
             displayName = "BaseProject Convention Plugin"
             description = project.description
             tags = listOf("fabric", "convention")
+        }
+    }
+}
+
+val reposiliteUsername = findProperty("reposiliteUsername") as String?
+val reposilitePassword = findProperty("reposilitePassword") as String?
+if (reposiliteUsername != null && reposilitePassword != null) {
+    publishing {
+        repositories {
+            maven {
+                name = "reposilite"
+                url = uri(
+                    "https://maven.florianreuth.de/" +
+                        if (project.version.toString().contains("SNAPSHOT")) "snapshots" else "releases"
+                )
+                credentials {
+                    username = reposiliteUsername
+                    password = reposilitePassword
+                }
+                authentication {
+                    create<BasicAuthentication>("basic")
+                }
+            }
         }
     }
 }
