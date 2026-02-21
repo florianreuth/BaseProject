@@ -81,9 +81,12 @@ fun Project.configureProjectDetails() {
     findProperty("project_group")?.let { group = it as String }
     findProperty("project_version")?.let { version = it as String }
     findProperty("project_description")?.let { description = it as String }
-    apply(plugin = "base")
-    extensions.getByType(BasePluginExtension::class.java).apply {
-        findProperty("project_name")?.let { archivesName.set(it as String) }
+
+    if (this == rootProject) {
+        apply(plugin = "base")
+        extensions.getByType(BasePluginExtension::class.java).apply {
+            findProperty("project_name")?.let { archivesName.set(it as String) }
+        }
     }
 }
 
