@@ -18,35 +18,17 @@
 package de.florianreuth.baseproject
 
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
-import net.fabricmc.loom.api.fabricapi.FabricApiExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.maven
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.repositories
+import org.gradle.kotlin.dsl.*
 import org.gradle.language.jvm.tasks.ProcessResources
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
 
 typealias MappingsConfigurer = Project.() -> Unit
 
-/**
- * Returns a [MappingsConfigurer] that configures Yarn mappings for the project.
- *
- * Required project property:
- * - `yarn_mappings_version`: The version of Yarn mappings to use.
- *
- * @param version Optional override for the Yarn version.
- */
-@Deprecated("Yarn mappings will not be available after Minecraft 1.21.11. See https://fabricmc.net/2025/10/31/obfuscation.html for more information.")
-fun yarnMapped(version: String? = null): MappingsConfigurer = {
-    val yarnVersion = version ?: property("yarn_mappings_version") as String
-    dependencies {
-        "mappings"("net.fabricmc:yarn:$yarnVersion:v2")
-    }
-}
+val Project.fabricApiVersion: String
+    get() = property("fabric_api_version") as String
 
 /**
  * Returns a [MappingsConfigurer] that configures Mojang + Parchment layered mappings.
@@ -215,44 +197,6 @@ fun Project.configureApiJij(): Configuration {
 }
 
 /**
- * Creates or retrieves the `modJij` configuration and sets it to be extended by:
- * - `modImplementation`
- * - `modCompileOnlyApi`
- * - `include`
- *
- * This setup is intended for Fabric or mod-based projects using Java-in-Jar (JiJ) dependencies.
- * It ensures the dependencies are available at compile-time, runtime, and are bundled into the final mod jar.
- *
- * @return The created or existing `modJij` configuration.
- */
-@Deprecated("This is only required if you use setupFabricRemap(). Prefer using configureJij() instead.")
-fun Project.configureModJij(): Configuration {
-    val jijConfig = configurations.maybeCreate("modJij")
-
-    configurations.getByName("modImplementation").extendsFrom(jijConfig)
-    configurations.getByName("modApi").extendsFrom(jijConfig)
-    configurations.getByName("include").extendsFrom(jijConfig)
-
-    return jijConfig
-}
-
-/**
- * Adds a submodule which is a Fabric mod to the project.
- *
- * @param name The name of the submodule
- */
-@Deprecated("This is only required if you use setupFabricRemap(). Prefer using configureJij() instead.")
-fun Project.includeFabricSubmodule(name: String) {
-    dependencies {
-        project(mapOf("path" to ":$name", "configuration" to "namedElements")).apply {
-            "implementation"(this)
-            "api"(this)
-        }
-        "include"(project(":$name"))
-    }
-}
-
-/**
  * Add support to the jar in jar system from Fabric to support transitive dependencies by manually proxying them into the jar.
  */
 fun Project.includeTransitiveJijDependencies() {
@@ -267,12 +211,13 @@ fun Project.includeTransitiveJijDependencies() {
     // New method via components since the configurations will be accessed earlier on.
     fun configure(targetName: String) {
         configurations.findByName(targetName)?.defaultDependencies {
-            jijConfig.incoming.resolutionResult.allComponents.mapNotNull { it.id as? ModuleComponentIdentifier }.forEach { id ->
-                val notation = "${id.group}:${id.module}:${id.version}"
-                add(dependencies.create(notation) {
-                    isTransitive = false
-                })
-            }
+            jijConfig.incoming.resolutionResult.allComponents.mapNotNull { it.id as? ModuleComponentIdentifier }
+                .forEach { id ->
+                    val notation = "${id.group}:${id.module}:${id.version}"
+                    add(dependencies.create(notation) {
+                        isTransitive = false
+                    })
+                }
         }
     }
 
@@ -290,60 +235,6 @@ private fun Project.includeTransitiveJijRemapDependencies(jijConfig: Configurati
                 dependencies.add("api", this)
                 dependencies.add("implementation", dependencies.create(this))
                 dependencies.add("include", this)
-            }
-        }
-    }
-}
-
-/**
- * Adds core Fabric API modules to the project and directly shades them into the jar using the `jij` configuration.
- *
- * See [configureFabricApiModules] for details on the modules added.
- *
- * @param modules The Fabric API modules to include.
- */
-fun Project.includeFabricApiModules(vararg modules: String) {
-    val remap = pluginManager.hasPlugin("net.fabricmc.fabric-loom-remap")
-    if (remap) {
-        configureModJij()
-        configureFabricApiModules("modJij", *modules)
-    } else {
-        configureJij()
-        configureFabricApiModules("jij", *modules)
-    }
-}
-
-/**
- * Adds core Fabric API modules to the project.
- *
- * See [configureFabricApiModules] for details on the modules added.
- *
- * @param modules The Fabric API modules to include.
- */
-fun Project.loadFabricApiModules(vararg modules: String) {
-    val remap = pluginManager.hasPlugin("net.fabricmc.fabric-loom-remap")
-    configureFabricApiModules(if (remap) "modImplementation" else "implementation", *modules)
-}
-
-/**
- * Adds Fabric API modules to the project.
- *
- * Requires that the `fabric-loom` plugin is applied.
- * @param configuration The configuration to add the modules to. Defaults to `modImplementation`.
- * @param modules The Fabric API modules to include.
- * @param version The version of the Fabric API to use. Defaults to the value of `fabric_api_version` property.
- */
-fun Project.configureFabricApiModules(
-    configuration: String,
-    vararg modules: String,
-    version: String = property("fabric_api_version") as String
-) {
-    pluginManager.withPlugin("fabric-loom") {
-        val fabricApi = extensions.getByType(FabricApiExtension::class.java)
-        dependencies {
-            configuration(fabricApi.module("fabric-api-base", version))
-            modules.forEach {
-                configuration(fabricApi.module(it, version))
             }
         }
     }
