@@ -33,6 +33,12 @@ fun Project.latestCommitMessage(): String {
     return runGitCommand(listOf("log", "-1", "--pretty=%B"))
 }
 
+fun Project.topCommitChangelog(): String {
+    val commitHash = latestCommitHash()
+    val commitMessage = latestCommitMessage().lineSequence().firstOrNull()?.trim().orEmpty()
+    return if (commitMessage.isBlank()) commitHash else "$commitHash $commitMessage"
+}
+
 fun Project.branchName(): String {
     return runGitCommand(listOf("rev-parse", "--abbrev-ref", "HEAD"))
 }
