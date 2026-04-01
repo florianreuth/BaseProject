@@ -3,7 +3,7 @@ plugins {
     `kotlin-dsl`
     signing
     `maven-publish`
-    id("com.gradle.plugin-publish") version "2.0.0"
+    id("com.gradle.plugin-publish") version "2.1.1"
 }
 
 group = property("project_group") as String
