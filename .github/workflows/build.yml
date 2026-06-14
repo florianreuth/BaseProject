@@ -16,7 +16,7 @@ jobs:
         with:
           cache-disabled: true
           cache-provider: basic
-      - name: Set up JDK 25
+      - name: Set up Java
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
           distribution: 'temurin'
