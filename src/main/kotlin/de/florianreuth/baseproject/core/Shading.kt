@@ -15,25 +15,27 @@
  * limitations under the License.
  */
 
-package de.florianreuth.baseproject
+package de.florianreuth.baseproject.core
 
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.jvm.tasks.Jar
-import org.gradle.kotlin.dsl.attributes
 
 /**
- * Configures the application JAR to specify the main class in the manifest.
- * Also excludes the `run/` folder from IntelliJ's project model.
- *
- * @param mainClass the fully qualified name of the main class to use in the JAR manifest.
- * Defaults to the `application_main` project property if not specified.
+ * Configures a custom `shadedDependencies` configuration used to embed shaded dependencies in the JAR.
  */
-fun Project.configureApplication(mainClass: String = project.property("application_main") as String) {
-    tasks.named("jar", Jar::class.java).configure {
-        manifest {
-            attributes("Main-Class" to mainClass)
-        }
+fun Project.configureShadedDependencies(): Configuration {
+    val configuration = configurations.create("shadedDependencies").apply {
+        isCanBeResolved = true
+        isCanBeConsumed = true
+        configurations.findByName("implementation")?.extendsFrom(this)
     }
-
-    excludeRunFolder()
+    tasks.named("jar", Jar::class.java).configure {
+        from({ configuration.map { zipTree(it) } }) {
+            exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+        }
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    return configuration
 }

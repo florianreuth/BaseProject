@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianreuth.baseproject
+package de.florianreuth.baseproject.integration
 
 import org.gradle.api.Project
 import org.gradle.api.provider.ListProperty
@@ -25,28 +25,38 @@ import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
+/**
+ * Provides information about the latest commit in the Git repository.
+ */
 fun Project.latestCommitHash(): String {
     return runGitCommand(listOf("rev-parse", "--short", "HEAD"))
 }
 
+/**
+ * Provides the commit message of the latest commit in the Git repository.
+ */
 fun Project.latestCommitMessage(): String {
     return runGitCommand(listOf("log", "-1", "--pretty=%B"))
 }
 
-fun Project.topCommitChangelog(): String {
-    val commitHash = latestCommitHash()
-    val commitMessage = latestCommitMessage().lineSequence().firstOrNull()?.trim().orEmpty()
-    return if (commitMessage.isBlank()) commitHash else "$commitHash $commitMessage"
-}
-
+/**
+ * Provides the name of the current Git branch.
+ */
 fun Project.branchName(): String {
     return runGitCommand(listOf("rev-parse", "--abbrev-ref", "HEAD"))
 }
 
+/**
+ * Runs a Git command and returns the output. Returns "unknown" if the command fails.
+ */
 fun Project.runGitCommand(args: List<String>): String {
     return providers.of(GitCommand::class.java) { parameters.args.set(args) }.getOrNull() ?: "unknown"
 }
 
+/**
+ * A Gradle ValueSource that runs a Git command and returns its output.
+ * If the command fails, the ValueSource returns null.
+ */
 abstract class GitCommand : ValueSource<String, GitCommand.GitCommandParameters> {
 
     @get:Inject

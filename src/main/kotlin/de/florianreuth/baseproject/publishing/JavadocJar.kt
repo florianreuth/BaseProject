@@ -15,23 +15,19 @@
  * limitations under the License.
  */
 
-package de.florianreuth.baseproject
+package de.florianreuth.baseproject.publishing
 
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.plugins.ide.idea.model.IdeaModel
+import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.kotlin.dsl.apply
 
 /**
- * Excludes the `run/` directory from IntelliJ IDEA's project model.
- * Useful to avoid clutter or build tool interference during development.
- *
- * Requires the `idea` plugin to be applied.
+ * Generates a sources JAR and a Javadoc JAR.
  */
-fun Project.excludeRunFolder() {
-    plugins.apply("idea")
-    extensions.getByType<IdeaModel>().apply {
-        module {
-            excludeDirs.add(file("run"))
-        }
+fun Project.generateJavadocJar() {
+    apply(plugin = "java-library")
+    extensions.getByType(JavaPluginExtension::class.java).apply {
+        withSourcesJar()
+        withJavadocJar()
     }
 }

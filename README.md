@@ -2,11 +2,14 @@
 A Gradle convention plugin for streamlined project setup and publishing.
 
 ## Contact
-If you encounter any issues, please report them on the [issue tracker](https://github.com/florianreuth/BaseProject/issues).
+If you encounter any issues, please report them on
+the [issue tracker](https://github.com/florianreuth/BaseProject/issues).
 If you just want to talk or need help with BaseProject, feel free to join my [Discord](https://florianreuth.de/discord).
 
 ## Basic Setup
-Most of the functions provided by this plugin will default to global set properties in the `gradle.properties` file. However, you can override them for special handling (e.g., `setupJava(version = 17)` instead of using the `project_jvm_version` property).
+The functions provided by this plugin read their configuration from properties in your `gradle.properties` file. Set the
+properties for the features you use; anything the plugin does not find is simply skipped (except where a property is
+explicitly required, such as `jvm_version`).
 
 ### Kotlin DSL Example:
 Add the plugin to your **`settings.gradle.kts`** file:
@@ -32,22 +35,21 @@ plugins {
     id("de.florianreuth.baseproject")
 }
 
-// Sets up common configurations: project metadata, Java toolchain, and compiler options
+// Sets up common configurations: project metadata, repositories, Java toolchain, and compiler options
 setupProject()
 ```
 
 Set project properties in the **`gradle.properties`** file:
 
 ```properties
-project_jvm_version=17
-
+# Required by setupProject()
+jvm_version=17
+# Optional metadata; each is only applied if present
 project_group=com.example
 project_name=ExampleProject
 project_version=1.0.0-SNAPSHOT
 project_description=Example Java project.
 ```
-
-The above can be omitted if you prefer, as the plugin will only set the available properties.
 
 ---
 
@@ -73,15 +75,16 @@ plugins {
     id 'de.florianreuth.baseproject'
 }
 
-// Sets up common configurations: project metadata, Java toolchain, and compiler options
+// Sets up common configurations: project metadata, repositories, Java toolchain, and compiler options
 setupProject()
 ```
 
 Set project properties in the **`gradle.properties`** file:
 
 ```properties
-project_jvm_version=17
-
+# Required by setupProject()
+jvm_version=17
+# Optional metadata; each is only applied if present
 project_group=com.example
 project_name=ExampleProject
 project_version=1.0.0-SNAPSHOT
@@ -91,105 +94,131 @@ project_description=Example Java project.
 ---
 
 ## Publishing
+`setupPublishing()` configures a Maven publication (with signing) and registers the GitHub, Reposilite, and Sonatype (
+Maven Central) repositories. A repository is only activated when its credentials are present, so you can configure just
+the ones you need.
+
 ### Kotlin DSL Example:
 Add the following to your **`build.gradle.kts`** (below the `setupProject` call):
 
 ```kotlin
-// Maven Central repository definition
-configureOssrhRepository()
+import de.florianreuth.baseproject.setupPublishing
 
-// Sets publishing metadata
-configurePublishing(listOf(DeveloperInfo("<username>", "<full name>", "<contact mail>")))
+// Configures the publication, signing, and the GitHub / Reposilite / Sonatype repositories
+setupPublishing()
 ```
 
 ### Groovy DSL Example:
 Add the following to your **`build.gradle`** (below the `setupProject` call):
 
 ```groovy
-// Maven Central repository definition
-configureOssrhRepository()
-
-// Sets publishing metadata
-configurePublishing([new DeveloperInfo('<username>', '<full name>', '<contact mail>')])
+// Configures the publication, signing, and the GitHub / Reposilite / Sonatype repositories
+setupPublishing()
 ```
 
----
+> Publishing to the ViaVersion repository instead? Use `setupViaPublishing()`, which sets the appropriate owner and
+> license before publishing to GitHub and the Via repository.
+
+### Publishing Metadata
+
+Set the following in your project's **`gradle.properties`**:
+
+```properties
+github_account=florianreuth
+github_repository=ExampleProject
+publish_owner_name=<full name>
+publish_owner_mail=<contact mail>
+# Optional; defaults to Apache-2.0
+# publish_license=Apache-2.0
+# publish_license_url=https://www.apache.org/licenses/LICENSE-2.0
+```
+
+The GitHub account and repository are used to derive the publication owner id, distribution URL, and license URL
+automatically.
 
 ### Signing and Publishing Credentials
-#### **`gradle.properties` in your `.gradle` folder:**
+
+Add credentials to the **`gradle.properties`** in your user `.gradle` folder (keep them out of the repository). Only the
+repositories whose credentials are present get activated:
+
 ```properties
-# Signing properties; required for OSSRH
+# Signing (publications are signed when these are present)
 signing.keyId=<the last 8 digits of your key id>
 signing.password=<your key password>
 signing.secretKeyRingFile=<path to your keyring file>
-
-# Maven Central credentials
-ossrhUsername=<your account name>
-ossrhPassword=<your account password> # This is an access token nowadays
+# Sonatype / Maven Central
+sonatypeToken=<your Sonatype token>
+sonatypePassword=<your Sonatype token password>
+# Reposilite
+reposiliteUsername=<your Reposilite username>
+reposilitePassword=<your Reposilite password>
+# ViaVersion repository (only for setupViaPublishing)
+ViaUsername=<your Via username>
+ViaPassword=<your Via password>
 ```
-
-#### **`gradle.properties` in the project folder:**
-
-```properties
-publishing_gh_account=florianreuth
-publishing_dev_name=<full name>
-publishing_dev_mail=<contact mail>
-```
-
-You can also add your own repository server. The `configurePublishing` function will always sign the publications if the signing properties are present.
 
 ---
 
 ## Fabric Setup
+`setupFabric()` applies Fabric Loom, wires up the Fabric loader and Minecraft dependencies, expands `fabric.mod.json`,
+and — if a `<project-name>.accesswidener` file is present under `src/main/resources` — loads it automatically.
+
 ### Kotlin DSL Example:
 Add the following to your **`build.gradle.kts`** (below the `setupProject` call):
 
 ```kotlin
-// Fabric client setup with Mojang mappings. If an .accesswidener file with the project name is present, it will also be loaded.
-setupFabric()
+import de.florianreuth.baseproject.integration.setupFabric
 
-// Yarn mappings (optional):
-// setupFabric(yarnMapped())
+setupFabric()
 ```
 
 Set the required versions in **`gradle.properties`**:
 
 ```properties
+# Required
 minecraft_version=1.21.5
-parchment_version=1.21.5:2025.04.19
-# yarn_mappings_version=1.21.5+build.1
 fabric_loader_version=0.16.14
+# Optional
+# fabric_api_version=0.119.2+1.21.5
+# fabric_kotlin_version=1.13.1+kotlin.2.1.20   (added automatically when the Kotlin plugin is applied)
+# supported_minecraft_versions=1.21.4,1.21.5
 ```
 
 ---
 
 ### Groovy DSL Example:
+
 Add the following to your **`build.gradle`** (below the `setupProject` call):
 
 ```groovy
-// Fabric client setup with Mojang mappings. If an .accesswidener file with the project name is present, it will also be loaded.
 setupFabric()
-
-// Yarn mappings (optional):
-// setupFabric(yarnMapped())
 ```
 
 Set the required versions in **`gradle.properties`**:
 
 ```properties
+# Required
 minecraft_version=1.21.5
-parchment_version=1.21.5:2025.04.19
-# yarn_mappings_version=1.21.5+build.1
 fabric_loader_version=0.16.14
+# Optional
+# fabric_api_version=0.119.2+1.21.5
+# fabric_kotlin_version=1.13.1+kotlin.2.1.20
+# supported_minecraft_versions=1.21.4,1.21.5
 ```
 
 ---
 
 ## Moving On
-You can use additional utilities like automatic dependency shading:
+The plugin ships additional utilities. A couple of the common ones:
 
-### Kotlin DSL Example:
+### Shaded dependencies
+Embed dependencies directly into the output JAR:
+
+**Kotlin DSL**
+
 ```kotlin
+import de.florianreuth.baseproject.core.configureShadedDependencies
+
 val library = configureShadedDependencies()
 
 dependencies {
@@ -197,7 +226,8 @@ dependencies {
 }
 ```
 
-### Groovy DSL Example:
+**Groovy DSL**
+
 ```groovy
 def library = configureShadedDependencies()
 
@@ -206,4 +236,21 @@ dependencies {
 }
 ```
 
-For more utilities and detailed documentation, please refer to the Kotlin files and methods in the plugin, which include detailed KotlinDoc comments.
+### Application JAR
+Set the `Main-Class` manifest attribute from the `application_main` property:
+
+```kotlin
+import de.florianreuth.baseproject.core.configureApplication
+
+configureApplication()
+```
+
+```properties
+application_main=com.example.Main
+```
+
+> `configureApplication()` no longer excludes the `run/` folder from the IntelliJ IDEA model. If you want that, call
+`excludeRunFolder()` (from `de.florianreuth.baseproject.integration`) explicitly.
+
+For more utilities and detailed documentation, please refer to the Kotlin files and methods in the plugin, which include
+detailed KotlinDoc comments.
