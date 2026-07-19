@@ -6,11 +6,17 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-    open-pull-requests-limit: 10
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     cooldown:
       default-days: 7
     directory: "/"
     schedule:
       interval: "monthly"
-    open-pull-requests-limit: 10
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
