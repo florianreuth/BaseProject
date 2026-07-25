@@ -18,9 +18,13 @@
 package de.florianreuth.baseproject
 
 import de.florianreuth.baseproject.core.*
-import de.florianreuth.baseproject.publishing.*
+import de.florianreuth.baseproject.publishing.configureGitHubPublishing
+import de.florianreuth.baseproject.publishing.configureReposiliteRepository
+import de.florianreuth.baseproject.publishing.configureSonatypeRepository
+import de.florianreuth.baseproject.publishing.configureViaVersionRepository
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.plugin.extraProperties
 
 open class BaseProjectPlugin : Plugin<Project> {
 
@@ -68,13 +72,15 @@ fun Project.setupPublishing() {
  * Sets up publishing for the project using ViaVersion.
  *
  * Requires the following project properties:
+ * - `publish_owner_id`: The publication owner id.
  * - `publish_owner_name`: The publication owner name.
  * - `publish_owner_mail`: The publication owner email.
  */
 fun Project.setupViaPublishing() {
     configureViaVersionRepository()
 
-    setProperty("github_account", "ViaVersion")
-    setProperty("publish_license", "GPL-3.0")
+    extraProperties.set("github_account", "ViaVersion")
+    extraProperties.set("github_repository", project.name)
+    extraProperties.set("publish_license", "GPL-3.0")
     configureGitHubPublishing()
 }

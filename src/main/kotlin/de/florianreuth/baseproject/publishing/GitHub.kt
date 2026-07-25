@@ -18,6 +18,7 @@
 package de.florianreuth.baseproject.publishing
 
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.plugin.extraProperties
 
 /**
  * Configures publishing from a GitHub repository.
@@ -29,8 +30,8 @@ fun Project.configureGitHubPublishing() {
     val account = property("github_account") as String
     val repository = property("github_repository") as String
 
-    setProperty("publish_owner_id", account)
-    setProperty("publish_distribution", "github.com/$account/$repository")
-    setProperty("publish_license_url", "https://github.com/$account/$repository/blob/main/LICENSE")
+    extraProperties.set("publish_owner_id", account)
+    extraProperties.set("publish_distribution", "github.com/$account/$repository")
+    extraProperties.set("publish_license_url", "https://github.com/$account/$repository/blob/main/LICENSE")
     configurePublishing()
 }
