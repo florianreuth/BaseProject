@@ -25,6 +25,19 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.plugins.signing.SigningExtension
 
+/**
+ * Configures Maven publishing and signing for the project.
+ * Requires the following properties:
+ * - `project_name`: The human-readable project name.
+ * - `publish_distribution`: The distribution host (e.g. `github.com/owner/repo`).
+ * - `publish_owner_id`: The developer id.
+ * - `publish_owner_name`: The developer name.
+ * - `publish_owner_mail`: The developer email.
+ *
+ * Optional properties:
+ * - `publish_license`: The license name (defaults to `Apache-2.0`).
+ * - `publish_license_url`: The license URL (defaults to the Apache 2.0 license URL).
+ */
 fun Project.configurePublishing() {
     val projectName = property("project_name") as String
 

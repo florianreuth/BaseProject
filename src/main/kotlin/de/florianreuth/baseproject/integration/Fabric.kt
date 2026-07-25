@@ -30,11 +30,11 @@ val Project.fabricApiVersion: String
 
 /**
  * Sets up Fabric development environment.
- * Requires the following project properties:
+ * Requires the following properties:
  * - `fabric_loader_version`: The version of Fabric Loader to use
  * - `minecraft_version`: The version of Minecraft to target
  *
- * Optional project properties:
+ * Optional properties:
  * - `fabric_kotlin_version`: The version of Fabric Kotlin to use
  * - `fabric_api_version`: The version of Fabric API to use
  * - `supported_minecraft_versions`: A comma-separated list of supported Minecraft versions
