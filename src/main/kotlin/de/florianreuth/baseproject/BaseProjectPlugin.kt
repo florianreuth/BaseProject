@@ -57,15 +57,17 @@ fun Project.setupProject() {
  * Sets up publishing for the project.
  *
  * Requires the following project properties:
- * - `github_account`: The GitHub account id.
- * - `github_repository`: The GitHub repository name.
+ * - `publish_owner_id`: The publication owner id.
  * - `publish_owner_name`: The publication owner name.
  * - `publish_owner_mail`: The publication owner email.
  */
 fun Project.setupPublishing() {
-    configureGitHubPublishing()
     configureReposiliteRepository()
     configureSonatypeRepository()
+
+    extraProperties.set("github_account", property("publish_owner_id") as String)
+    extraProperties.set("github_repository", property("project_name") as String)
+    configureGitHubPublishing()
 }
 
 /**
@@ -80,7 +82,7 @@ fun Project.setupViaPublishing() {
     configureViaVersionRepository()
 
     extraProperties.set("github_account", "ViaVersion")
-    extraProperties.set("github_repository", project.name)
+    extraProperties.set("github_repository", property("project_name") as String)
     extraProperties.set("publish_license", "GPL-3.0")
     configureGitHubPublishing()
 }

@@ -26,6 +26,8 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.plugins.signing.SigningExtension
 
 fun Project.configurePublishing() {
+    val projectName = property("project_name") as String
+
     val distribution = property("publish_distribution") as String
 
     val ownerId = property("publish_owner_id") as String
@@ -48,7 +50,7 @@ fun Project.configurePublishing() {
                 from(components["java"])
 
                 pom {
-                    name.set(artifactId)
+                    name.set(projectName)
                     description.set(project.description)
                     url.set("https://$distribution")
                     licenses {

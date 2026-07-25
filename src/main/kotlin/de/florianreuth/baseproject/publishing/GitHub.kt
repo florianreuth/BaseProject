@@ -30,7 +30,6 @@ fun Project.configureGitHubPublishing() {
     val account = property("github_account") as String
     val repository = property("github_repository") as String
 
-    extraProperties.set("publish_owner_id", account)
     extraProperties.set("publish_distribution", "github.com/$account/$repository")
     extraProperties.set("publish_license_url", "https://github.com/$account/$repository/blob/main/LICENSE")
     configurePublishing()
