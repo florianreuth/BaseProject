@@ -124,8 +124,7 @@ setupPublishing()
 Set the following in your project's **`gradle.properties`**:
 
 ```properties
-github_account=florianreuth
-github_repository=ExampleProject
+publish_owner_id=florianreuth
 publish_owner_name=<full name>
 publish_owner_mail=<contact mail>
 # Optional; defaults to Apache-2.0
@@ -152,9 +151,6 @@ sonatypePassword=<your Sonatype token password>
 # Reposilite
 reposiliteUsername=<your Reposilite username>
 reposilitePassword=<your Reposilite password>
-# ViaVersion repository (only for setupViaPublishing)
-ViaUsername=<your Via username>
-ViaPassword=<your Via password>
 ```
 
 ---
