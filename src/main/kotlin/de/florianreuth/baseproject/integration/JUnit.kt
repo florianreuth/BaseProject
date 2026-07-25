@@ -21,6 +21,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.gradle.kotlin.dsl.dependencies
 
 /**
  * Configures the JUnit platform for tests.
@@ -36,6 +37,11 @@ fun Project.configureTest() {
         val runDir = layout.projectDirectory.dir("run").asFile
         if (runDir.isDirectory) {
             workingDir = runDir
+        }
+    }
+    pluginManager.withPlugin("net.fabricmc.fabric-loom") {
+        dependencies {
+            "testImplementation"("net.fabricmc:fabric-loader-junit:${property("fabric_loader_version")}")
         }
     }
 }
