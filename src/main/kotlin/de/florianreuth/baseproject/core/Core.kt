@@ -43,21 +43,21 @@ fun Project.configureDefaultRepositories() {
 /**
  * Configures the project metadata, such as group, version, and description.
  *
- * Supports the following project properties:
+ * Requires the following properties:
  * - `project_group`: The group ID of the project
  * - `project_version`: The version of the project
  * - `project_description`: A short description of the project
  * - `project_name`: The archive base name for outputs
  */
 fun Project.configureProjectMetadata() {
-    findProperty("project_group")?.let { group = it as String }
-    findProperty("project_version")?.let { version = it as String }
-    findProperty("project_description")?.let { description = it as String }
+    group = property("project_group") as String
+    version = property("project_version") as String
+    description = property("project_description") as String
 
     if (this == rootProject) {
         apply(plugin = "base")
         extensions.getByType(BasePluginExtension::class.java).apply {
-            findProperty("project_name")?.let { archivesName.set(it as String) }
+            archivesName.set(property("project_name") as String)
         }
     }
 }
@@ -67,7 +67,7 @@ fun Project.configureProjectMetadata() {
  * Requires the `jvm_version` project property to be set.
  */
 fun Project.configureJvmToolchain() {
-    val version = project.property("jvm_version").toString().toInt()
+    val version = project.property("jvm_version") as Int
 
     apply(plugin = "java-library")
     extensions.getByType(JavaPluginExtension::class.java).apply {
