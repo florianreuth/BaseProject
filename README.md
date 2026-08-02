@@ -1,17 +1,12 @@
 # BaseProject
 A Gradle convention plugin for streamlined project setup and publishing.
 
-## Contact
-If you encounter any issues, please report them on
-the [issue tracker](https://github.com/florianreuth/BaseProject/issues).
-If you just want to talk or need help with BaseProject, feel free to join my [Discord](https://florianreuth.de/discord).
-
 ## Basic Setup
 The functions provided by this plugin read their configuration from properties in your `gradle.properties` file. Set the
 properties for the features you use; anything the plugin does not find is simply skipped (except where a property is
 explicitly required, such as `jvm_version`).
 
-### Kotlin DSL Example:
+### Kotlin DSL Example
 Add the plugin to your **`settings.gradle.kts`** file:
 
 ```kotlin
@@ -51,9 +46,7 @@ project_version=1.0.0-SNAPSHOT
 project_description=Example Java project.
 ```
 
----
-
-### Groovy DSL Example:
+### Groovy DSL Example
 Add the plugin to your **`settings.gradle`** file:
 
 ```groovy
@@ -91,14 +84,12 @@ project_version=1.0.0-SNAPSHOT
 project_description=Example Java project.
 ```
 
----
-
 ## Publishing
 `setupPublishing()` configures a Maven publication (with signing) and registers the GitHub, Reposilite, and Sonatype (
 Maven Central) repositories. A repository is only activated when its credentials are present, so you can configure just
 the ones you need.
 
-### Kotlin DSL Example:
+### Kotlin DSL Example
 Add the following to your **`build.gradle.kts`** (below the `setupProject` call):
 
 ```kotlin
@@ -108,7 +99,7 @@ import de.florianreuth.baseproject.setupPublishing
 setupPublishing()
 ```
 
-### Groovy DSL Example:
+### Groovy DSL Example
 Add the following to your **`build.gradle`** (below the `setupProject` call):
 
 ```groovy
@@ -153,13 +144,11 @@ reposiliteUsername=<your Reposilite username>
 reposilitePassword=<your Reposilite password>
 ```
 
----
-
 ## Fabric Setup
 `setupFabric()` applies Fabric Loom, wires up the Fabric loader and Minecraft dependencies, expands `fabric.mod.json`,
 and — if a `<project-name>.accesswidener` file is present under `src/main/resources` — loads it automatically.
 
-### Kotlin DSL Example:
+### Kotlin DSL Example
 Add the following to your **`build.gradle.kts`** (below the `setupProject` call):
 
 ```kotlin
@@ -180,8 +169,6 @@ fabric_loader_version=0.16.14
 # supported_minecraft_versions=1.21.4,1.21.5
 ```
 
----
-
 ### Groovy DSL Example:
 
 Add the following to your **`build.gradle`** (below the `setupProject` call):
@@ -201,8 +188,6 @@ fabric_loader_version=0.16.14
 # fabric_kotlin_version=1.13.1+kotlin.2.1.20
 # supported_minecraft_versions=1.21.4,1.21.5
 ```
-
----
 
 ## Moving On
 The plugin ships additional utilities. A couple of the common ones:
@@ -250,3 +235,8 @@ application_main=com.example.Main
 
 For more utilities and detailed documentation, please refer to the Kotlin files and methods in the plugin, which include
 detailed KotlinDoc comments.
+
+## Contact
+
+- Issues: https://github.com/florianreuth/BaseProject/issues
+- Discord: https://florianreuth.de/discord
