@@ -55,9 +55,10 @@ fun Project.configureProjectMetadata() {
     description = property("project_description") as String
 
     if (this == rootProject) {
+        val projectName = findProperty("project_name") as? String ?: return
         apply(plugin = "base")
         extensions.getByType(BasePluginExtension::class.java).apply {
-            archivesName.set(property("project_name") as String)
+            archivesName.set(projectName)
         }
     }
 }
