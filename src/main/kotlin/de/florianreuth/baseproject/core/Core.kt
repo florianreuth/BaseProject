@@ -67,7 +67,7 @@ fun Project.configureProjectMetadata() {
  * Requires the `jvm_version` project property to be set.
  */
 fun Project.configureJvmToolchain() {
-    val version = project.property("jvm_version") as Int
+    val version = (project.property("jvm_version") as String).toInt()
 
     apply(plugin = "java-library")
     extensions.getByType(JavaPluginExtension::class.java).apply {
