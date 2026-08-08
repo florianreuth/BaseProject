@@ -30,7 +30,9 @@ fun Project.hideBuildWarnings() {
         options.compilerArgs.addAll(listOf("-nowarn", "-Xlint:-unchecked", "-Xlint:-deprecation"))
     }
     tasks.withType(Javadoc::class.java).configureEach {
-        (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:none", "-quiet")
+        val options = options as StandardJavadocDocletOptions
+        options.addBooleanOption("Xdoclint:none", true)
+        options.quiet()
     }
 }
 

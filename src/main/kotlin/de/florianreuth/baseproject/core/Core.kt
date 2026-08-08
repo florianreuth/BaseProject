@@ -106,7 +106,9 @@ fun Project.suffixLicenseFile() {
         val projectName = project.name
 
         from("LICENSE") {
-            rename { "LICENSE_$projectName" }
+            rename {
+                "LICENSE_$projectName"
+            }
         }
     }
 }
