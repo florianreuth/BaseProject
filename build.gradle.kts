@@ -6,6 +6,16 @@ plugins {
     id("com.gradle.plugin-publish") version "2.1.1"
 }
 
+// HACK: Gradle overwrites all customized wrapper configurations,
+// Meaning we have to include them in buildscript to make them persistent.
+// (Source: https://github.com/gradle/gradle/issues/36172)
+tasks.wrapper {
+    networkTimeout = 10000
+    retries = 3
+    retryBackOffMs = 1000
+    validateDistributionUrl = true
+}
+
 group = property("project_group") as String
 version = property("project_version") as String
 description = property("project_description") as String
