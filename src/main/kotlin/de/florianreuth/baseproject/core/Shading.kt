@@ -43,6 +43,7 @@ private fun Project.createEmbeddingConfiguration(name: String): Configuration {
         isCanBeConsumed = true
     }
     tasks.named("jar", Jar::class.java).configure {
+        dependsOn(configuration)
         from({ configuration.map { zipTree(it) } }) {
             exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
         }
