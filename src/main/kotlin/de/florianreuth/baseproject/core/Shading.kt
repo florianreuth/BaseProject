@@ -23,13 +23,24 @@ import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.jvm.tasks.Jar
 
 /**
- * Configures a custom `shadedDependencies` configuration used to embed shaded dependencies in the JAR.
+ * Configures a custom `shadedDependencies` configuration used to embed shaded dependencies in the JAR and also include
+ * them as normal dependencies.
  */
 fun Project.configureShadedDependencies(): Configuration {
-    val configuration = configurations.create("shadedDependencies").apply {
+    val configuration = createEmbeddingConfiguration("shadedDependencies")
+    configurations.findByName("implementation")?.extendsFrom(configuration)
+    return configuration
+}
+
+/**
+ * Configures a custom `embeddedDependencies` configuration used to embed dependencies in the JAR.
+ */
+fun Project.configureEmbeddedDependencies(): Configuration = createEmbeddingConfiguration("embeddedDependencies")
+
+private fun Project.createEmbeddingConfiguration(name: String): Configuration {
+    val configuration = configurations.create(name).apply {
         isCanBeResolved = true
         isCanBeConsumed = true
-        configurations.findByName("implementation")?.extendsFrom(this)
     }
     tasks.named("jar", Jar::class.java).configure {
         from({ configuration.map { zipTree(it) } }) {
