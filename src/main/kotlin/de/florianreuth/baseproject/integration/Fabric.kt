@@ -59,7 +59,6 @@ fun Project.setupFabric() {
     }
     repositories {
         maven("https://maven.fabricmc.net/")
-        maven("https://maven.parchmentmc.org/")
     }
     dependencies {
         "minecraft"("com.mojang:minecraft:${property("minecraft_version")}")
