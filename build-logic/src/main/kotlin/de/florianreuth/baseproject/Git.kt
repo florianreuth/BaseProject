@@ -15,7 +15,22 @@
  * limitations under the License.
  */
 
-package de.florianreuth.baseproject.integration
+package de.florianreuth.baseproject/*
+ * This file is part of BaseProject - https://github.com/florianreuth/BaseProject
+ * Copyright (C) 2024-2026 Florian Reuth <git@florianreuth.de>
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import org.gradle.api.Project
 import org.gradle.api.provider.ListProperty
@@ -26,37 +41,30 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 /**
- * Provides information about the latest commit in the Git repository.
+ * Short hash of the latest commit, or "unknown" if Git is unavailable.
  */
-fun Project.latestCommitHash(): String {
-    return runGitCommand(listOf("rev-parse", "--short", "HEAD"))
-}
+fun Project.latestCommitHash(): String = runGitCommand(listOf("rev-parse", "--short", "HEAD"))
 
 /**
- * Provides the commit message of the latest commit in the Git repository.
+ * Message of the latest commit, or "unknown" if Git is unavailable.
  */
-fun Project.latestCommitMessage(): String {
-    return runGitCommand(listOf("log", "-1", "--pretty=%B"))
-}
+fun Project.latestCommitMessage(): String = runGitCommand(listOf("log", "-1", "--pretty=%B"))
 
 /**
- * Provides the name of the current Git branch.
+ * Name of the current branch, or "unknown" if Git is unavailable.
  */
-fun Project.branchName(): String {
-    return runGitCommand(listOf("rev-parse", "--abbrev-ref", "HEAD"))
-}
+fun Project.branchName(): String = runGitCommand(listOf("rev-parse", "--abbrev-ref", "HEAD"))
 
 /**
- * Runs a Git command and returns the output. Returns "unknown" if the command fails.
+ * Runs a Git command through a configuration-cache compatible [ValueSource].
+ *
+ * @param args the arguments passed to `git`
+ * @return the trimmed output, or "unknown" if the command fails or prints nothing
  */
 fun Project.runGitCommand(args: List<String>): String {
     return providers.of(GitCommand::class.java) { parameters.args.set(args) }.getOrNull() ?: "unknown"
 }
 
-/**
- * A Gradle ValueSource that runs a Git command and returns its output.
- * If the command fails, the ValueSource returns null.
- */
 abstract class GitCommand : ValueSource<String, GitCommand.GitCommandParameters> {
 
     @get:Inject
@@ -68,10 +76,9 @@ abstract class GitCommand : ValueSource<String, GitCommand.GitCommandParameters>
 
     override fun obtain(): String? {
         try {
-            val command = listOf("git") + parameters.args.get()
             val output = ByteArrayOutputStream()
             execOperations.exec {
-                commandLine = command
+                commandLine = listOf("git") + parameters.args.get()
                 standardOutput = output
                 isIgnoreExitValue = true
             }

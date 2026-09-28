@@ -1,0 +1,10 @@
+[versions]
+fabric-loom = "1.17-SNAPSHOT"
+kotlin = "2.4.10"
+
+[libraries]
+# Plugin markers, only needed by the build-logic snippets that apply these plugins
+fabric-loom-plugin = { module = "net.fabricmc.fabric-loom:net.fabricmc.fabric-loom.gradle.plugin", version.ref = "fabric-loom" }
+kotlin-jvm-plugin = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
+foojay-resolver-convention-plugin = { module = "org.gradle.toolchains.foojay-resolver-convention:org.gradle.toolchains.foojay-resolver-convention.gradle.plugin", version = "1.0.0" }
+classtokenreplacer-plugin = { module = "net.raphimc.class-token-replacer:net.raphimc.class-token-replacer.gradle.plugin", version = "1.1.7" }
