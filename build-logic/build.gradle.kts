@@ -2,19 +2,13 @@ plugins {
     `kotlin-dsl`
 }
 
-repositories {
-    gradlePluginPortal()
-    // Only needed by the base.fabric-* snippets
-    maven("https://maven.fabricmc.net/")
-}
-
 dependencies {
-    // Only needed by the base.fabric-* snippets
+    // Only needed by the Fabric and Jar-in-Jar snippets
     implementation(libs.fabric.loom.plugin)
-    // Only needed by base.fabric-kotlin-conventions
+    // Only needed by base.fabric_kotlin
     implementation(libs.kotlin.jvm.plugin)
-    // Only needed by base.settings-conventions
+    // Only needed by base.settings
     implementation(libs.foojay.resolver.convention.plugin)
-    // Only needed by via.build-constants
+    // Only needed by extra.fill_build_constants
     implementation(libs.classtokenreplacer.plugin)
 }

@@ -1,8 +1,10 @@
 # BaseProject
 Gradle Kotlin DSL build-logic snippets for streamlined project setup and publishing.
 
-Every project keeps its own `build-logic` included build: copy `build-logic/build.gradle.kts`,
-`build-logic/settings.gradle.kts` and the snippets you need from [`build-logic/src/main/kotlin`](build-logic/src/main/kotlin).
+Every project keeps its own `build-logic` included build:
+
+copy `build-logic/build.gradle.kts`, `build-logic/settings.gradle.kts` and the snippets you need from [`build-logic/src/main/kotlin`](build-logic/src/main/kotlin).
+
 The plugin versions of `build-logic` come from your `gradle/libs.versions.toml`, see
 [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
@@ -15,7 +17,7 @@ pluginManagement {
 }
 
 plugins {
-    id("base.settings-conventions")
+    id("base.settings")
 }
 
 rootProject.name = "example"
@@ -25,9 +27,9 @@ rootProject.name = "example"
 
 ```kotlin
 plugins {
-    id("base.base-conventions")
-    id("base.publishing-conventions")
-    id("base.reposilite-maven-publishing")
+    id("base.java")
+    id("base.maven_publish")
+    id("publishing.reposilite")
 }
 ```
 
@@ -46,8 +48,8 @@ publish_owner_mail=<contact mail>
 ```
 
 ## Fabric
-Keep the Fabric repository in `pluginManagement`, since the build-logic dependencies are resolved through it, and declare
-the versions in your catalog:
+Keep the Fabric repository in `pluginManagement`, since the build-logic dependencies are resolved through it, apply
+`base.fabric_settings` so Loom declares its repositories in the settings, and declare the versions in your catalog:
 
 ```kotlin
 pluginManagement {
@@ -57,6 +59,11 @@ pluginManagement {
         gradlePluginPortal()
         maven("https://maven.fabricmc.net/")
     }
+}
+
+plugins {
+    id("base.settings")
+    id("base.fabric_settings")
 }
 ```
 

@@ -16,6 +16,6 @@ tasks.withType<Test>().configureEach {
 
 pluginManager.withPlugin("net.fabricmc.fabric-loom") {
     dependencies {
-        "testImplementation"(the<VersionCatalogsExtension>().named("libs").findLibrary("fabric-loader-junit").get())
+        "testImplementation"(project.the<VersionCatalogsExtension>().named("libs").findLibrary("fabric-loader-junit").get())
     }
 }

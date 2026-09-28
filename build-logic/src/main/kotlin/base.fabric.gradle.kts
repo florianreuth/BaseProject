@@ -2,11 +2,7 @@ import de.florianreuth.baseproject.latestCommitHash
 
 plugins {
     id("net.fabricmc.fabric-loom")
-    id("base.exclude-run-folder")
-}
-
-repositories {
-    maven("https://maven.fabricmc.net/")
+    id("idea.exclude_run_dir")
 }
 
 // Precompiled script plugins have no type-safe accessors for the consumer's catalog

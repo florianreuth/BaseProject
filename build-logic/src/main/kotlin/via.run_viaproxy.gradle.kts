@@ -9,7 +9,7 @@ val viaProxy = configurations.create("viaProxy")
 dependencies {
     addProvider<MinimalExternalModuleDependency, ExternalModuleDependency>(
         viaProxy.name,
-        the<VersionCatalogsExtension>().named("libs").findLibrary("viaproxy").get()
+        project.the<VersionCatalogsExtension>().named("libs").findLibrary("viaproxy").get()
     ) {
         isTransitive = false
     }
