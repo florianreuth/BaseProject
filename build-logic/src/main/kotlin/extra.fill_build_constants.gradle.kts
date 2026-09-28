@@ -13,3 +13,8 @@ sourceSets.configureEach {
         property("\${impl_version}", implVersion)
     }
 }
+
+// With replaceInPlace the plugin only finalizes classes with the replacement, so the jar could pack unreplaced classes
+tasks.jar {
+    dependsOn("replaceTokens")
+}
