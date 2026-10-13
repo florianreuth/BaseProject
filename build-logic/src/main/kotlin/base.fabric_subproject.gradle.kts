@@ -1,3 +1,5 @@
+// https://github.com/florianreuth/BaseProject
+
 import net.fabricmc.loom.LoomGradleExtension
 
 plugins {
@@ -9,9 +11,13 @@ configurations.configureEach {
     resolutionStrategy.eachDependency {
         if (requested.group == "net.minecraft") {
             val minecraftJars = LoomGradleExtension.get(rootProject).namedMinecraftProvider.minecraftJars
-            check(minecraftJars.size == 1) { "Expected exactly one minecraft jar, got ${minecraftJars.size}" }
+            check(minecraftJars.size == 1) {
+                "Expected exactly one minecraft jar, got ${minecraftJars.size}"
+            }
             val jar = minecraftJars.single()
-            check(jar.isMerged) { "Expected minecraft jar to be merged" }
+            check(jar.isMerged) {
+                "Expected minecraft jar to be merged"
+            }
             val hash = jar.path.fileName.toString().substringAfter("minecraft-merged-").substringBefore("-")
             useTarget("${requested.group}:minecraft-merged-$hash:${requested.version}")
         }

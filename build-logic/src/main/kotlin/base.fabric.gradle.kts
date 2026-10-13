@@ -1,8 +1,9 @@
-import de.florianreuth.baseproject.latestCommitHash
+// https://github.com/florianreuth/BaseProject
 
 plugins {
+    id("base.java")
     id("net.fabricmc.fabric-loom")
-    id("idea.exclude_run_dir")
+    id("idea")
 }
 
 // Precompiled script plugins have no type-safe accessors for the consumer's catalog
@@ -20,8 +21,15 @@ if (classTweakerFile.exists()) {
     }
 }
 
-val supportedMcVersion = (findProperty("supported_minecraft_versions") as String?)?.ifEmpty { null }
-    ?: libs.findVersion("minecraft").get().requiredVersion
+idea {
+    module {
+        excludeDirs.add(file("run"))
+    }
+}
+
+val supportedMcVersion = (findProperty("supported_minecraft_versions") as String?)?.takeIf {
+    it.isNotEmpty()
+} ?: libs.findVersion("minecraft").get().requiredVersion
 tasks.processResources {
     val projectName = project.name
     val projectVersion = project.version

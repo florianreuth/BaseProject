@@ -1,5 +1,7 @@
+// https://github.com/florianreuth/BaseProject
+
 plugins {
-    java
+    id("base.java")
 }
 
 val embeddedDependencies = configurations.create("embeddedDependencies") {
@@ -9,7 +11,11 @@ val embeddedDependencies = configurations.create("embeddedDependencies") {
 
 tasks.jar {
     dependsOn(embeddedDependencies)
-    from({ embeddedDependencies.map { zipTree(it) } }) {
+    from({
+        embeddedDependencies.map {
+            zipTree(it)
+        }
+    }) {
         exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE

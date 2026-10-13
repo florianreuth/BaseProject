@@ -27,9 +27,7 @@ rootProject.name = "example"
 
 ```kotlin
 plugins {
-    id("base.java")
-    id("base.maven_publish")
-    id("publishing.reposilite")
+    id("publishing.florianreuth")
 }
 ```
 
@@ -62,7 +60,6 @@ pluginManagement {
 }
 
 plugins {
-    id("base.settings")
     id("base.fabric_settings")
 }
 ```

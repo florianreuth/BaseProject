@@ -1,21 +1,4 @@
-/*
- * This file is part of BaseProject - https://github.com/florianreuth/BaseProject
- * Copyright (C) 2024-2026 Florian Reuth <git@florianreuth.de>
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package de.florianreuth.baseproject
+// https://github.com/florianreuth/BaseProject
 
 import org.gradle.api.Project
 import org.gradle.api.provider.ListProperty
@@ -47,7 +30,9 @@ fun Project.branchName(): String = runGitCommand(listOf("rev-parse", "--abbrev-r
  * @return the trimmed output, or "unknown" if the command fails or prints nothing
  */
 fun Project.runGitCommand(args: List<String>): String {
-    return providers.of(GitCommand::class.java) { parameters.args.set(args) }.getOrNull() ?: "unknown"
+    return providers.of(GitCommand::class.java) {
+        parameters.args.set(args)
+    }.getOrNull() ?: "unknown"
 }
 
 abstract class GitCommand : ValueSource<String, GitCommand.GitCommandParameters> {
@@ -68,7 +53,9 @@ abstract class GitCommand : ValueSource<String, GitCommand.GitCommandParameters>
                 isIgnoreExitValue = true
             }
 
-            return output.toString(Charsets.UTF_8).trim().takeIf { it.isNotBlank() }
+            return output.toString(Charsets.UTF_8).trim().takeIf {
+                it.isNotBlank()
+            }
         } catch (_: Exception) {
             return null
         }

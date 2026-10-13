@@ -1,3 +1,5 @@
+// https://github.com/florianreuth/BaseProject
+
 plugins {
     id("base.fabric")
     id("org.jetbrains.kotlin.jvm")

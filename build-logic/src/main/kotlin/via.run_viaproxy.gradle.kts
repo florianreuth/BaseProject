@@ -1,7 +1,9 @@
+// https://github.com/florianreuth/BaseProject
+
 // Task to quickly test/debug code changes using https://github.com/ViaVersion/ViaProxy
 // For further instructions see the ViaProxy repository README
 plugins {
-    java
+    id("base.java")
 }
 
 val viaProxy = configurations.create("viaProxy")
@@ -22,7 +24,9 @@ val prepareViaProxyFiles by tasks.registering(Copy::class) {
     into(layout.projectDirectory.dir("run/jars"))
 
     val projectName = project.name
-    rename { "${projectName}.jar" }
+    rename {
+        "${projectName}.jar"
+    }
 }
 
 val cleanupViaProxyFiles by tasks.registering(Delete::class) {

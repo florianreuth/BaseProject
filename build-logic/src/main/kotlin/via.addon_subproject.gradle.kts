@@ -1,5 +1,6 @@
+// https://github.com/florianreuth/BaseProject
+
 plugins {
-    java
     id("base.java")
     id("via.maven_publish")
 }

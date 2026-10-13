@@ -1,8 +1,9 @@
-import de.florianreuth.baseproject.latestCommitHash
+// https://github.com/florianreuth/BaseProject
+
 import net.raphimc.classtokenreplacer.extension.ClassTokenReplacerExtension
 
 plugins {
-    java
+    id("base.java")
     id("net.raphimc.class-token-replacer")
 }
 
