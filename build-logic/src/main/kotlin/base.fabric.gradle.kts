@@ -13,10 +13,10 @@ dependencies {
     implementation(libs.findLibrary("fabric-loader").get())
 }
 
-val accessWidenerFile = file("src/main/resources/${project.name.lowercase()}.accesswidener")
-if (accessWidenerFile.exists()) {
+val classTweakerFile = file("src/main/resources/${project.name.lowercase()}.classtweaker")
+if (classTweakerFile.exists()) {
     loom {
-        accessWidenerPath = accessWidenerFile
+        accessWidenerPath = classTweakerFile
     }
 }
 
