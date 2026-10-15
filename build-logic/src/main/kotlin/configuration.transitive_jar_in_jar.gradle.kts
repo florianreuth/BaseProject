@@ -9,7 +9,6 @@ listOf("api", "implementation", "include").forEach { targetName ->
     configurations.named(targetName) {
         defaultDependencies {
             jarInJar.get().incoming.resolutionResult.allComponents
-                // Platforms such as BOMs have no jar and must not be added as a library
                 .filterNot { component ->
                     component.variants.any {
                         it.isPlatform()
@@ -27,7 +26,6 @@ listOf("api", "implementation", "include").forEach { targetName ->
     }
 }
 
-// Resolved attributes may be desugared to strings, so the category is matched by name
 fun ResolvedVariantResult.isPlatform(): Boolean {
     val category = attributes.keySet().firstOrNull {
         it.name == Category.CATEGORY_ATTRIBUTE.name

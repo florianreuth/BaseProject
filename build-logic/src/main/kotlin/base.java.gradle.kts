@@ -16,7 +16,6 @@ if (project == rootProject) {
     }
 }
 
-// The Kotlin plugin picks up the Java toolchain, so no Kotlin-specific configuration is needed
 val jvmVersion = (property("jvm_version") as String).toInt()
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(jvmVersion)

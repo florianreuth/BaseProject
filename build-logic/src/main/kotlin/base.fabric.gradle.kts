@@ -6,7 +6,6 @@ plugins {
     id("idea")
 }
 
-// Precompiled script plugins have no type-safe accessors for the consumer's catalog
 val libs = the<VersionCatalogsExtension>().named("libs")
 
 dependencies {
